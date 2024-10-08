@@ -1,4 +1,4 @@
-const telegramBotToken = '7181676168:AAHTuOyLuI8Q1UhouYF5BWqztVBCzvH1JMM'; // Bot API kaliti
+const telegramBotToken = ''; // Bot API kaliti
 const telegramChatId = '1211791131'; // Kanal ID si
 
 let timeLeft = 120; // 2 daqiqa
