@@ -23,6 +23,12 @@ function showError(message) {
     errorDiv.classList.remove('hidden');
 }
 
+// Hide error messages
+function hideError() {
+    const errorDiv = document.getElementById('errorMessage');
+    errorDiv.classList.add('hidden');
+}
+
 // Initialize event listeners after DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
     const togglePassword = document.getElementById('togglePassword');
@@ -51,6 +57,9 @@ async function login() {
     const username = document.getElementById('usernameInput').value.trim();
     const password = document.getElementById('passwordInput').value.trim();
 
+    // Hide any existing error message before proceeding
+    hideError();
+
     if (!username || !password) {
         showError('Iltimos, login va parolni kiriting.');
         return;
@@ -58,7 +67,10 @@ async function login() {
 
     try {
         const response = await fetch('students.json');
-        if (!response.ok) throw new Error('students.json faylni yuklashda xato');
+        if (!response.ok) {
+            showError('students.json faylni yuklashda xato');
+            return;
+        }
         const students = await response.json();
 
         const user = students.find(s => s.username === username && s.password === password);
@@ -79,6 +91,7 @@ async function login() {
         }
     } catch (error) {
         showError(`Kirishda xato: ${error.message}`);
+        return;
     }
 }
 
@@ -86,20 +99,26 @@ async function login() {
 async function loadTests(group) {
     try {
         const response = await fetch('tests.json');
-        if (!response.ok) throw new Error('tests.json faylni yuklashda xato');
+        if (!response.ok) {
+            showError('tests.json faylni yuklashda xato');
+            return;
+        }
         const tests = await response.json();
         questions = tests.find(t => t.group === group)?.questions || [];
         if (questions.length === 0) {
-            throw new Error(`"${group}" guruhiga mos testlar topilmadi`);
+            showError(`"${group}" guruhiga mos testlar topilmadi`);
+            return;
         }
         questions.forEach((q, i) => {
             if (!q.question || !Array.isArray(q.options) || q.options.length < 2 || !q.options.some(opt => opt.correct)) {
-                throw new Error(`Savol ${i + 1} noto‘g‘ri formatda`);
+                showError(`Savol ${i + 1} noto‘g‘ri formatda`);
+                return;
             }
         });
         renderQuestion();
     } catch (error) {
         showError(`Testlarni yuklashda xato: ${error.message}`);
+        return;
     }
 }
 
@@ -283,7 +302,7 @@ function checkAnswers() {
         }
 
         if (questionElement) {
-            const correctAnswerElement = questionElement.querySelector(`input[value="${correctIndex}"]`);
+            const correctAnswerElement = document.getElementById(`question${index + 1}`).querySelector(`input[value="${correctIndex}"]`);
             if (correctAnswerElement) correctAnswerElement.parentElement.classList.add('highlight');
         }
     });
