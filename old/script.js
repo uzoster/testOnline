@@ -19,14 +19,23 @@ function escapeHTML(str) {
 // Display error messages
 function showError(message) {
     const errorDiv = document.getElementById('errorMessage');
-    errorDiv.textContent = message;
-    errorDiv.classList.remove('hidden');
+    if (errorDiv) {
+        errorDiv.textContent = message;
+        errorDiv.classList.remove('hidden');
+    } else {
+        console.error('errorMessage elementi topilmadi');
+    }
 }
 
 // Hide error messages
 function hideError() {
     const errorDiv = document.getElementById('errorMessage');
-    errorDiv.classList.add('hidden');
+    if (errorDiv) {
+        errorDiv.classList.add('hidden');
+        errorDiv.textContent = ''; // Clear the text to avoid empty div visibility
+    } else {
+        console.error('errorMessage elementi topilmadi');
+    }
 }
 
 // Initialize event listeners after DOM is loaded
@@ -50,6 +59,9 @@ document.addEventListener('DOMContentLoaded', () => {
     } else {
         console.error('togglePassword yoki passwordInput elementi topilmadi');
     }
+
+    // Hide error message on page load
+    hideError();
 });
 
 // Login function
@@ -57,7 +69,7 @@ async function login() {
     const username = document.getElementById('usernameInput').value.trim();
     const password = document.getElementById('passwordInput').value.trim();
 
-    // Hide any existing error message before proceeding
+    // Ensure error message is hidden at the start
     hideError();
 
     if (!username || !password) {
@@ -78,6 +90,9 @@ async function login() {
             showError('Noto‘g‘ri login yoki parol.');
             return;
         }
+
+        // Successful login, ensure error message is hidden
+        hideError();
 
         currentUser = user;
         localStorage.setItem('userName', user.name);
