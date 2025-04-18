@@ -1,0 +1,60 @@
+[
+    {
+        "group": "A",
+        "questions": [
+            {
+                "question": "HTML nima uchun ishlatiladi?",
+                "options": [
+                    { "text": "Kompyuter o'yinlari yaratish", "correct": false },
+                    { "text": "Veb sahifalar yaratish", "correct": true },
+                    { "text": "Ma'lumotlar bazasi boshqarish", "correct": false }
+                ]
+            },
+            {
+                "question": "<br> tegi nima uchun ishlatiladi?",
+                "options": [
+                    { "text": "Qalin matn qilish", "correct": false },
+                    { "text": "Matnni yangi qatorga o'tkazish", "correct": true },
+                    { "text": "Bog'lanish yaratish", "correct": false }
+                ]
+            },
+            {
+                "question": "HTML hujjatidagi eng katta sarlavha tegi qaysi?",
+                "options": [
+                    { "text": "<h1>", "correct": true },
+                    { "text": "<h6>", "correct": false },
+                    { "text": "<head>", "correct": false }
+                ]
+            }
+        ]
+    },
+    {
+        "group": "B",
+        "questions": [
+            {
+                "question": "HTMLning to'liq nomi nima?",
+                "options": [
+                    { "text": "Hyper Text Markup Language", "correct": true },
+                    { "text": "Home Tool Markup Language", "correct": false },
+                    { "text": "Hyperlink Text Management Language", "correct": false }
+                ]
+            },
+            {
+                "question": "Rasm qo'shish uchun qaysi tegdan foydalaniladi?",
+                "options": [
+                    { "text": "<img>", "correct": true },
+                    { "text": "<picture>", "correct": false },
+                    { "text": "<image>", "correct": false }
+                ]
+            },
+            {
+                "question": "Bog'lanishni yaratish uchun qaysi teg ishlatiladi?",
+                "options": [
+                    { "text": "<a>", "correct": true },
+                    { "text": "<link>", "correct": false },
+                    { "text": "<href>", "correct": false }
+                ]
+            }
+        ]
+    }
+]

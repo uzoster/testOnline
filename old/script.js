@@ -1,12 +1,13 @@
 const telegramBotToken = '7181676168:AAHTuOyLuI8Q1UhouYF5BWqztVBCzvH1JMM';
 const telegramChatId = '1211791131';
-const reattemptTime = 4 * 60 * 60 * 1000;
+const reattemptTime = 3 * 60 * 60 * 1000;
 let timeLeft = 120;
 let startTime;
 let timer;
 let questions = [];
 let currentQuestionIndex = 0;
 let answers = [];
+let currentUser = null;
 
 // Escape HTML characters to display tags as text
 function escapeHTML(str) {
@@ -15,14 +16,81 @@ function escapeHTML(str) {
     return div.innerHTML;
 }
 
-// Load questions from JSON
-async function loadQuestions() {
+// Display error messages
+function showError(message) {
+    const errorDiv = document.getElementById('errorMessage');
+    errorDiv.textContent = message;
+    errorDiv.classList.remove('hidden');
+}
+
+// Initialize event listeners after DOM is loaded
+document.addEventListener('DOMContentLoaded', () => {
+    const togglePassword = document.getElementById('togglePassword');
+    const passwordInput = document.getElementById('passwordInput');
+    
+    if (togglePassword && passwordInput) {
+        togglePassword.addEventListener('click', () => {
+            const toggleIcon = togglePassword.querySelector('i');
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                toggleIcon.classList.remove('fa-eye');
+                toggleIcon.classList.add('fa-eye-slash');
+            } else {
+                passwordInput.type = 'password';
+                toggleIcon.classList.remove('fa-eye-slash');
+                toggleIcon.classList.add('fa-eye');
+            }
+        });
+    } else {
+        console.error('togglePassword yoki passwordInput elementi topilmadi');
+    }
+});
+
+// Login function
+async function login() {
+    const username = document.getElementById('usernameInput').value.trim();
+    const password = document.getElementById('passwordInput').value.trim();
+
+    if (!username || !password) {
+        showError('Iltimos, login va parolni kiriting.');
+        return;
+    }
+
     try {
-        const response = await fetch('questions.json');
-        if (!response.ok) throw new Error('JSON faylni yuklashda xatolik');
-        questions = await response.json();
-        if (!Array.isArray(questions) || questions.length === 0) {
-            throw new Error('Savollar ro‘yxati bo‘sh yoki noto‘g‘ri formatda');
+        const response = await fetch('students.json');
+        if (!response.ok) throw new Error('students.json faylni yuklashda xato');
+        const students = await response.json();
+
+        const user = students.find(s => s.username === username && s.password === password);
+        if (!user) {
+            showError('Noto‘g‘ri login yoki parol.');
+            return;
+        }
+
+        currentUser = user;
+        localStorage.setItem('userName', user.name);
+        if (checkReattempt(user.name)) {
+            localStorage.setItem(`${user.name}_lastAttempt`, Date.now());
+            await loadTests(user.group);
+            document.getElementById('loginSection').style.display = 'none';
+            document.getElementById('timerSection').classList.remove('hidden');
+            document.getElementById('quizForm').style.display = 'block';
+            startTimer();
+        }
+    } catch (error) {
+        showError(`Kirishda xato: ${error.message}`);
+    }
+}
+
+// Load tests based on group
+async function loadTests(group) {
+    try {
+        const response = await fetch('tests.json');
+        if (!response.ok) throw new Error('tests.json faylni yuklashda xato');
+        const tests = await response.json();
+        questions = tests.find(t => t.group === group)?.questions || [];
+        if (questions.length === 0) {
+            throw new Error(`"${group}" guruhiga mos testlar topilmadi`);
         }
         questions.forEach((q, i) => {
             if (!q.question || !Array.isArray(q.options) || q.options.length < 2 || !q.options.some(opt => opt.correct)) {
@@ -31,15 +99,8 @@ async function loadQuestions() {
         });
         renderQuestion();
     } catch (error) {
-        showError(`Savollarni yuklashda xato: ${error.message}`);
+        showError(`Testlarni yuklashda xato: ${error.message}`);
     }
-}
-
-// Display error messages
-function showError(message) {
-    const errorDiv = document.getElementById('errorMessage');
-    errorDiv.textContent = message;
-    errorDiv.classList.remove('hidden');
 }
 
 // Render the current question
@@ -54,7 +115,7 @@ function renderQuestion() {
     const q = questions[currentQuestionIndex];
     questionContainer.innerHTML = `
         <div id="question${currentQuestionIndex + 1}" class="question-card bg-gray-50 p-4 sm:p-6 mb-4 rounded-lg fade-in">
-            <p class="font-semibold mb-3 text-sm sm:text-base">${currentQuestionIndex + 1}. ${escapeHTML(q.question)}</p>
+            <p class="font-semibold mb-3 text-sm sm:text-base"><i class="fas fa-question-circle mr-2"></i> ${currentQuestionIndex + 1}. ${escapeHTML(q.question)}</p>
             ${q.options.map((option, i) => `
                 <label class="block mb-2">
                     <input type="radio" name="q${currentQuestionIndex + 1}" value="${i}" class="mr-2" ${answers[currentQuestionIndex] === i.toString() ? 'checked' : ''}>
@@ -99,13 +160,8 @@ function nextQuestion() {
 }
 
 // Check if user can retake the quiz
-function checkReattempt(nameInput) {
-    if (!nameInput) {
-        alert('Iltimos, ismingizni kiriting.');
-        return false;
-    }
-
-    const lastAttemptTime = localStorage.getItem(`${nameInput}_lastAttempt`);
+function checkReattempt(name) {
+    const lastAttemptTime = localStorage.getItem(`${name}_lastAttempt`);
     if (lastAttemptTime) {
         const currentTime = Date.now();
         const timeElapsed = currentTime - lastAttemptTime;
@@ -115,29 +171,11 @@ function checkReattempt(nameInput) {
             const hours = Math.floor(remainingTime / (1000 * 60 * 60));
             const minutes = Math.floor((remainingTime % (1000 * 60 * 60)) / (1000 * 60));
             const seconds = Math.floor((remainingTime % (1000 * 60)) / 1000);
-            alert(`Siz testni yechganingiz uchun ${hours} soat ${minutes} minut ${seconds} soniya kuting.`);
+            showError(`Siz testni yechganingiz uchun ${hours} soat ${minutes} minut ${seconds} soniya kuting.`);
             return false;
         }
     }
-
     return true;
-}
-
-// Start the quiz
-function startTest() {
-    const nameInput = document.getElementById('nameInput').value.trim();
-    if (questions.length === 0) {
-        showError('Savollar hali yuklanmadi. Iltimos, biroz kuting.');
-        return;
-    }
-    if (checkReattempt(nameInput)) {
-        localStorage.setItem('userName', nameInput);
-        localStorage.setItem(`${nameInput}_lastAttempt`, Date.now());
-        document.getElementById('nameSection').style.display = 'none';
-        document.getElementById('timerSection').classList.remove('hidden');
-        document.getElementById('quizForm').style.display = 'block';
-        startTimer();
-    }
 }
 
 // Start the timer
@@ -299,7 +337,7 @@ function checkAnswers() {
     const incorrectAnswersText = incorrectQuestions.map(q => 
         `Savol: ${escapeHTML(q.question)}\nSizning javobingiz: ${escapeHTML(q.yourAnswer)}\nTo'g'ri javob: ${escapeHTML(q.correctAnswer)}`
     ).join('\n\n');
-    const telegramMessage = `<b>Foydalanuvchi:</b> ${userName}\n<b>To'g'ri javoblar:</b> ${score}\n<b>Foiz:</b> ${percentage.toFixed(2)}%\n<b>Sarflangan vaqt:</b> ${timeSpent} soniya\n\n<b>Xato javoblar:</b>\n${incorrectAnswersText || 'Xato javoblar yo‘q'}`;
+    const telegramMessage = `<b>Foydalanuvchi:</b> ${userName}\n<b>Guruh:</b> ${currentUser.group}\n<b>To'g'ri javoblar:</b> ${score}\n<b>Foiz:</b> ${percentage.toFixed(2)}%\n<b>Sarflangan vaqt:</b> ${timeSpent} soniya\n\n<b>Xato javoblar:</b>\n${incorrectAnswersText || 'Xato javoblar yo‘q'}`;
 
     sendToTelegram(telegramMessage);
 }
@@ -310,7 +348,7 @@ function checkIfTestCompleted() {
     const lastAttemptTime = localStorage.getItem(`${userName}_lastAttempt`);
     if (lastAttemptTime && (Date.now() - lastAttemptTime) < reattemptTime) {
         document.getElementById('quizForm').style.display = 'none';
-        document.getElementById('nameSection').style.display = 'none';
+        document.getElementById('loginSection').style.display = 'none';
         document.getElementById('timerSection').style.display = 'none';
         document.getElementById('result').classList.remove('hidden');
         document.getElementById('advice').textContent = "Siz testni yechganingiz uchun qayta yecholmaysiz.";
@@ -322,5 +360,4 @@ function checkIfTestCompleted() {
 }
 
 // Initialize
-loadQuestions();
 checkIfTestCompleted();

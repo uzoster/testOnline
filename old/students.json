@@ -1,0 +1,20 @@
+[
+    {
+        "username": "ali",
+        "password": "ali123",
+        "name": "Ali Valiev",
+        "group": "A"
+    },
+    {
+        "username": "sara",
+        "password": "sara456",
+        "name": "Sara Xolmatova",
+        "group": "B"
+    },
+    {
+        "username": "jasur",
+        "password": "jasur789",
+        "name": "Jasur To‘xtaev",
+        "group": "A"
+    }
+]

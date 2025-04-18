@@ -1,0 +1,181 @@
+body {
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    min-height: 100vh;
+}
+
+.container {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    border: 2px solid #e2e8f0;
+    background: linear-gradient(145deg, #ffffff, #f1f5f9);
+}
+
+.question-card {
+    transition: all 0.3s ease;
+    width: 100%;
+    overflow-x: auto;
+    border-left: 4px solid #3b82f6;
+}
+
+.question-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.fade-in {
+    animation: fadeIn 0.5s ease-in;
+}
+
+@keyframes fadeIn {
+    0% { opacity: 0; transform: translateY(20px); }
+    100% { opacity: 1; transform: translateY(0); }
+}
+
+.correct {
+    background-color: #d4edda;
+    border-left: 4px solid #28a745;
+}
+
+.incorrect {
+    background-color: #f8d7da;
+    border-left: 4px solid #dc3545;
+}
+
+.highlight {
+    font-weight: bold;
+    color: #28a745;
+}
+
+.progress-bar {
+    height: 12px;
+    background-color: #e9ecef;
+    border-radius: 6px;
+    overflow: hidden;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.progress {
+    height: 100%;
+    background: linear-gradient(to right, #3b82f6, #60a5fa);
+    transition: width 0.5s ease-in-out;
+}
+
+.error-message {
+    background-color: #fee2e2;
+    border: 1px solid #ef4444;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    margin-bottom: 1rem;
+    font-size: 0.875rem;
+    display: flex;
+    align-items: center;
+}
+
+.error-message::before {
+    content: "\f06a";
+    font-family: "Font Awesome 6 Free";
+    font-weight: 900;
+    margin-right: 0.5rem;
+    color: #ef4444;
+}
+
+.pulse {
+    animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+
+label {
+    display: flex;
+    align-items: center;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    margin-bottom: 0.5rem;
+    width: 100%;
+    word-wrap: break-word;
+}
+
+input[type="radio"] {
+    width: 1.25rem;
+    height: 1.25rem;
+    margin-right: 0.5rem;
+    flex-shrink: 0;
+    accent-color: #3b82f6;
+}
+
+input[type="text"], input[type="password"] {
+    transition: all 0.3s ease;
+}
+
+input[type="text"]:focus, input[type="password"]:focus {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+}
+
+#togglePassword {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem;
+}
+
+#togglePassword:hover i {
+    color: #1e40af;
+}
+
+button:hover i {
+    transform: translateX(2px);
+}
+
+@media (max-width: 640px) {
+    .container {
+        padding: 1rem;
+    }
+    .text-3xl {
+        font-size: 1.5rem;
+    }
+    .text-xl {
+        font-size: 1rem;
+    }
+    .text-lg {
+        font-size: 0.9rem;
+    }
+    .text-base {
+        font-size: 0.875rem;
+    }
+    input[type="text"], input[type="password"] {
+        width: 100%;
+        font-size: 0.875rem;
+    }
+    .navigation-buttons button {
+        padding: 0.5rem 1rem;
+        font-size: 0.75rem;
+    }
+    .question-card {
+        padding: 1rem;
+    }
+    label {
+        font-size: 0.85rem;
+    }
+    #togglePassword {
+        padding: 0.25rem;
+    }
+}
+
+@media (max-width: 360px) {
+    .text-3xl {
+        font-size: 1.25rem;
+    }
+    .text-lg {
+        font-size: 0.85rem;
+    }
+    .navigation-buttons button {
+        padding: 0.5rem 0.75rem;
+        font-size: 0.7rem;
+    }
+}

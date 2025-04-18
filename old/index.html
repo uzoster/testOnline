@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Savollari</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="flex items-center justify-center p-2 sm:p-4">
+    <div class="container max-w-3xl w-full bg-white rounded-2xl shadow-2xl p-4 sm:p-8">
+        <h1 class="text-2xl sm:text-3xl font-bold text-center text-blue-600 mb-6"><i class="fas fa-book-open mr-2"></i> HTML Savollari Testi</h1>
+        
+        <div id="errorMessage" class="error-message hidden"></div>
+
+        <div id="loginSection" class="fade-in">
+            <p class="text-base sm:text-lg mb-4 text-center"><i class="fas fa-sign-in-alt mr-2"></i> Iltimos, login va parolni kiriting:</p>
+            <div class="flex flex-col sm:flex-row justify-center gap-4">
+                <div class="relative w-full sm:w-64">
+                    <i class="fas fa-user absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500"></i>
+                    <input type="text" id="usernameInput" class="border rounded-lg p-3 pl-10 w-full focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Login">
+                </div>
+                <div class="relative w-full sm:w-64">
+                    <i class="fas fa-lock absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500"></i>
+                    <input type="password" id="passwordInput" class="border rounded-lg p-3 pl-10 pr-10 w-full focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Parol">
+                    <button type="button" id="togglePassword" class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                </div>
+                <button onclick="login()" class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition text-base"><i class="fas fa-arrow-right mr-2"></i> Kirish</button>
+            </div>
+        </div>
+
+        <div class="mt-6 hidden" id="timerSection">
+            <p class="timer text-lg sm:text-xl text-center text-blue-600"><i class="fas fa-clock mr-2"></i> Vaqt: <span id="timer">02:00</span></p>
+            <div class="progress-bar mt-2">
+                <div id="progress" class="progress"></div>
+            </div>
+        </div>
+
+        <form id="quizForm" class="mt-6 hidden">
+            <div id="questionContainer"></div>
+            <div class="navigation-buttons flex justify-between mt-4 gap-2">
+                <button type="button" onclick="previousQuestion()" id="prevButton" class="bg-gray-500 text-white py-2 px-3 sm:px-4 rounded-lg hover:bg-gray-600 transition disabled:opacity-50 text-sm sm:text-base" disabled><i class="fas fa-arrow-left mr-2"></i> Oldingi</button>
+                <button type="button" onclick="nextQuestion()" id="nextButton" class="bg-blue-600 text-white py-2 px-3 sm:px-4 rounded-lg hover:bg-blue-700 transition text-sm sm:text-base"><i class="fas fa-arrow-right mr-2"></i> Keyingi</button>
+            </div>
+            <button type="button" onclick="checkAnswers()" class="w-full bg-green-600 text-white py-3 rounded-lg hover:bg-green-700 transition mt-4 text-base"><i class="fas fa-check-circle mr-2"></i> Natijani ko'rish</button>
+        </form>
+
+        <div class="result hidden mt-6 p-4 sm:p-6 bg-gray-50 rounded-lg fade-in" id="result">
+            <h2 class="text-xl sm:text-2xl font-bold text-center mb-4"><i class="fas fa-trophy mr-2"></i> Natijalar</h2>
+            <p id="userGreeting" class="text-base sm:text-lg text-center"></p>
+            <p class="text-center text-sm sm:text-base"><i class="fas fa-check mr-2"></i> To'g'ri javoblar: <span id="correctAnswers" class="font-bold">0</span></p>
+            <p class="text-center text-sm sm:text-base"><i class="fas fa-percentage mr-2"></i> Foiz: <span id="percentage" class="font-bold">0</span>%</p>
+            <p class="text-center text-sm sm:text-base"><i class="fas fa-stopwatch mr-2"></i> Sarflangan vaqt: <span id="timeSpent" class="font-bold">0</span> soniya</p>
+            <p id="advice" class="text-center mt-4 font-semibold text-sm sm:text-base"></p>
+            <div id="resultChart" class="mt-6">
+                <canvas id="chart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
