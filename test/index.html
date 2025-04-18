@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Savollari</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            padding: 20px;
+        }
+        h1 {
+            color: #007BFF;
+        }
+        .question {
+            background: #fff;
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+        }
+        .result {
+            display: none;
+            background: #fff;
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 5px;
+        }
+        .correct {
+            background-color: #d4edda;
+            border-color: #c3e6cb;
+        }
+        .incorrect {
+            background-color: #f8d7da;
+            border-color: #f5c6cb;
+        }
+        .highlight {
+            font-weight: bold;
+            color: green;
+        }
+        .timer {
+            font-size: 20px;
+            color: #007BFF;
+            margin-bottom: 20px;
+        }
+        #resultChart {
+            max-width: 600px;
+            margin: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>HTML Savollari Testi</h1>
+    <div id="nameSection">
+        <p>Iltimos, ismingizni kiriting:</p>
+        <input type="text" id="nameInput" placeholder="Ismingizni kiriting">
+        <button onclick="startTest()">Boshlash</button>
+    </div>
+    <p class="timer">Vaqt: <span id="timer">02:00</span></p>
+    <form id="quizForm" style="display: none;">
+        <div id="question1">
+            <p>1. HTML nima uchun ishlatiladi?</p>
+            <label><input type="radio" name="q1" value="0"> Kompyuter o'yinlari yaratish</label><br>
+            <label><input type="radio" name="q1" value="1"> Veb sahifalar yaratish</label><br>
+            <label><input type="radio" name="q1" value="0"> Ma'lumotlar bazasi boshqarish</label><br>
+        </div>
+        <div id="question2">
+            <p>2. HTMLning to'liq nomi nima?</p>
+            <label><input type="radio" name="q2" value="0"> Hyper Text Markup Language</label><br>
+            <label><input type="radio" name="q2" value="1"> Hyper Text Markup Language</label><br>
+            <label><input type="radio" name="q2" value="0"> Home Tool Markup Language</label><br>
+        </div>
+        <div id="question3">
+            <p>3. < br > tegi nima uchun ishlatiladi?</p>
+            <label><input type="radio" name="q3" value="0">  Qalin matn qilish</label><br>
+            <label><input type="radio" name="q3" value="1"> Matnni yangi qatorga o'tkazish</label><br>
+            <label><input type="radio" name="q3" value="0"> Belgini qo'shish</label><br>
+            <label><input type="radio" name="q3" value="0"> Bog'lanish yaratish</label><br>
+        </div>
+        <div id="question4">
+            <p>4. HTML hujjatidagi eng katta sarlavha tegi qaysi?</p>
+            <label><input type="radio" name="q4" value="1"> < h1 > </label><br>
+            <label><input type="radio" name="q4" value="0"> < h6 > </label><br>
+            <label><input type="radio" name="q4" value="0"> < head > </label><br>
+            <label><input type="radio" name="q4" value="0"> < title ></label><br>
+        </div>
+        <div id="question5">
+            <p>5. Rasm qo'shish uchun qaysi tegdan foydalaniladi?</p>
+            <label><input type="radio" name="q5" value="0"> < picture > </label><br>
+            <label><input type="radio" name="q5" value="0"> < image > </label><br>
+            <label><input type="radio" name="q5" value="1"> < img > </label><br>
+            <label><input type="radio" name="q5" value="0"> < graphics > </label><br>
+        </div>
+        <div id="question6">
+            <p>6. HTML-da ro'yxat yaratish uchun qaysi teg ishlatiladi?</p>
+            <label><input type="radio" name="q6" value="0"> < list > </label><br>
+            <label><input type="radio" name="q6" value="1"> < ul > va < ol ><br>
+            <label><input type="radio" name="q6" value="0"> < li > va < ol ><br>
+            <label><input type="radio" name="q6" value="0"> < ol > va < il > </label><br>
+        </div>
+        <div id="question7">
+            <p>7. Bog'lanishni yaratish uchun qaysi teg ishlatiladi?</p>
+            <label><input type="radio" name="q7" value="0"> < link > </label><br>
+            <label><input type="radio" name="q7" value="1"> < a > <br>
+            <label><input type="radio" name="q7" value="0"> < href > <br>
+            <label><input type="radio" name="q7" value="0"> < hyperlink > </label><br>
+        </div>
+        <button type="button" onclick="checkAnswers()">Natijani ko'rish</button>
+    </form>
+    <div class="result" id="result">
+        <h2>Natijalar</h2>
+        <p id="userGreeting"></p>
+        <p>Sizning to'g'ri javoblaringiz soni: <span id="correctAnswers">0</span></p>
+        <p>Foiz: <span id="percentage">0</span>%</p>
+        <p>Testni tugatishga sarflangan vaqt: <span id="timeSpent">0</span> soniya</p>
+        <p id="advice"></p>
+        <div id="resultChart">
+            <canvas id="chart"></canvas>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        const telegramBotToken = '7181676168:AAHTuOyLuI8Q1UhouYF5BWqztVBCzvH1JMM'; // Bot API kaliti
+        const telegramChatId = '1211791131'; // Kanal ID si
+
+        const reattemptTime = 3 * 60 * 60 * 1000; // 3 soatni millisekundlarda
+
+        let timeLeft = 120; // 2 daqiqa
+        let startTime; // Test boshlanish vaqti
+        let timer; // Timerni saqlash uchun o'zgaruvchi
+
+        function checkReattempt() {
+            const nameInput = document.getElementById('nameInput').value.trim();
+            if (!nameInput) {
+                alert('Iltimos, ismingizni kiriting.');
+                return;
+            }
+
+            const lastAttemptTime = localStorage.getItem(`${nameInput}_lastAttempt`);
+            if (lastAttemptTime) {
+                const currentTime = Date.now();
+                const timeElapsed = currentTime - lastAttemptTime;
+
+                if (timeElapsed < reattemptTime) {
+                    const remainingTime = reattemptTime - timeElapsed;
+                    const hours = Math.floor(remainingTime / (1000 * 60 * 60));
+                    const minutes = Math.floor((remainingTime % (1000 * 60 * 60)) / (1000 * 60));
+                    const seconds = Math.floor((remainingTime % (1000 * 60)) / 1000);
+
+                    alert(`Siz allaqachon testni yechganingiz uchun qayta yecholmaysiz. Iltimos, ${hours} soat ${minutes} minut ${seconds} soniya kuting.`);
+                    return;
+                }
+            }
+
+            localStorage.setItem('userName', nameInput);
+            localStorage.setItem(`${nameInput}_lastAttempt`, Date.now());
+            document.getElementById('nameSection').style.display = 'none';
+            document.getElementById('quizForm').style.display = 'block';
+            startTimer();
+        }
+
+        function startTest() {
+            checkReattempt();
+        }
+
+        function startTimer() {
+            startTime = Date.now(); // Test boshlanish vaqti
+            const timerDisplay = document.getElementById('timer');
+            timer = setInterval(() => {
+                const minutes = Math.floor(timeLeft / 60);
+                const seconds = timeLeft % 60;
+                timerDisplay.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                timeLeft--;
+
+                if (timeLeft < 0) {
+                    clearInterval(timer);
+                    disableForm();
+                    checkAnswers();
+                }
+            }, 1000);
+        }
+
+        function disableForm() {
+            const formElements = document.getElementById('quizForm').elements;
+            for (let i = 0; i < formElements.length; i++) {
+                formElements[i].disabled = true;
+            }
+        }
+
+        function checkAnswers() {
+            clearInterval(timer); // Vaqtni to'xtatish
+
+            const form = document.getElementById('quizForm');
+            const result = document.getElementById('result');
+            const correctAnswersDisplay = document.getElementById('correctAnswers');
+            const percentageDisplay = document.getElementById('percentage');
+            const adviceDisplay = document.getElementById('advice');
+            const timeSpentDisplay = document.getElementById('timeSpent');
+
+            const correctAnswers = {
+                q1: '1',
+                q2: '1',
+                q3: '1',
+                q4: '1',
+                q5: '1',
+                q6: '1',
+                q7: '1',
+            };
+
+            let score = 0;
+            let totalQuestions = 0;
+            let incorrectQuestions = [];
+
+            for (const [key, value] of Object.entries(correctAnswers)) {
+                totalQuestions++;
+                const questionElement = document.getElementById(`question${key.slice(1)}`);
+                const selected = form.elements[key].value;
+
+                if (selected === value) {
+                    score++;
+                    questionElement.classList.add('correct');
+                } else {
+                    questionElement.classList.add('incorrect');
+                    incorrectQuestions.push({
+                        question: questionElement.querySelector('p').textContent,
+                        yourAnswer: form.elements[key].value,
+                        correctAnswer: value
+                    });
+                }
+            }
+
+            const percentage = (score / totalQuestions) * 100;
+            const timeSpent = Math.round((Date.now() - startTime) / 1000); // Sekundlarda vaqt
+
+            correctAnswersDisplay.textContent = score;
+            percentageDisplay.textContent = percentage.toFixed(2);
+            timeSpentDisplay.textContent = timeSpent;
+
+            result.style.display = 'block';
+
+            // To'g'ri javoblarni ko'rsatish
+            for (const [key, value] of Object.entries(correctAnswers)) {
+                const questionElement = document.getElementById(`question${key.slice(1)}`);
+                const correctAnswerElement = questionElement.querySelector(`input[value="${value}"]`);
+                correctAnswerElement.parentElement.classList.add('highlight');
+            }
+
+            // Foydalanuvchiga tavsiya berish
+            let advice;
+            if (percentage >= 70) {
+                advice = "Tabriklaymiz! Siz kursni davom ettirishingiz mumkin.";
+                adviceDisplay.style.color = "green";
+            } else {
+                advice = "Afsuski, siz kursni qayta o'qishingiz kerak.";
+                adviceDisplay.style.color = "red";
+            }
+            adviceDisplay.textContent = advice;
+
+            // Chart.js bilan natijalarni ko'rsatish
+            const ctx = document.getElementById('chart').getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['To\'g\'ri javoblar', 'Noto\'g\'ri javoblar'],
+                    datasets: [{
+                        label: 'Natijalar',
+                        data: [score, totalQuestions - score],
+                        backgroundColor: ['#28a745', '#dc3545'],
+                        borderColor: ['#1e7e34', '#c82333'],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+
+            // Telegram bot orqali natijalarni yuborish
+            const userName = localStorage.getItem('userName');
+            const incorrectAnswersText = incorrectQuestions.map(q => 
+                `Savol: ${q.question}\nSizning javobingiz: ${q.yourAnswer}\nTo'g'ri javob: ${q.correctAnswer}`
+            ).join('\n\n');
+            
+            fetch(`https://api.telegram.org/bot${telegramBotToken}/sendMessage`, {
+                method: 'POST',
+                body: JSON.stringify({
+                    chat_id: telegramChatId,
+                    text: `Foydalanuvchi: ${userName}\nTo'g'ri javoblar: ${score}\nFoiz: ${percentage.toFixed(2)}%\nTestni tugatishga sarflangan vaqt: ${timeSpent} soniya\n\nXato javoblar:\n${incorrectAnswersText}`
+                }),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }).then(response => response.json())
+              .then(data => {
+                  if (data.ok) {
+                      console.log('Natijalar muvaffaqiyatli yuborildi');
+                  } else {
+                      console.error('Natijalarni yuborishda xatolik yuz berdi:', data);
+                  }
+              })
+              .catch(error => console.error('Telegram API xatosi:', error));
+        }
+    </script>
+</body>
+</html>

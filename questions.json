@@ -1,0 +1,123 @@
+[
+    {
+      "question": "HTML nima uchun ishlatiladi?",
+      "options": [
+        { "text": "Kompyuter o'yinlari yaratish", "correct": false },
+        { "text": "Veb sahifalar yaratish", "correct": true },
+        { "text": "Ma'lumotlar bazasi boshqarish", "correct": false }
+      ]
+    },
+    {
+      "question": "HTMLning to'liq nomi nima?",
+      "options": [
+        { "text": "Hyper Text Markup Language", "correct": true },
+        { "text": "Home Tool Markup Language", "correct": false },
+        { "text": "Hyperlink Text Management Language", "correct": false }
+      ]
+    },
+    {
+      "question": "<br> tegi nima uchun ishlatiladi?",
+      "options": [
+        { "text": "Qalin matn qilish", "correct": false },
+        { "text": "Matnni yangi qatorga o'tkazish", "correct": true },
+        { "text": "Bog'lanish yaratish", "correct": false }
+      ]
+    },
+    {
+      "question": "HTML hujjatidagi eng katta sarlavha tegi qaysi?",
+      "options": [
+        { "text": "<h1>", "correct": true },
+        { "text": "<h6>", "correct": false },
+        { "text": "<head>", "correct": false }
+      ]
+    },
+    {
+      "question": "Rasm qo'shish uchun qaysi tegdan foydalaniladi?",
+      "options": [
+        { "text": "<img>", "correct": true },
+        { "text": "<picture>", "correct": false },
+        { "text": "<image>", "correct": false }
+      ]
+    },
+    {
+      "question": "HTML-da ro'yxat yaratish uchun qaysi teg ishlatiladi?",
+      "options": [
+        { "text": "<ul> va <ol>", "correct": true },
+        { "text": "<list>", "correct": false },
+        { "text": "<li> va <ol>", "correct": false }
+      ]
+    },
+    {
+      "question": "Bog'lanishni yaratish uchun qaysi teg ishlatiladi?",
+      "options": [
+        { "text": "<a>", "correct": true },
+        { "text": "<link>", "correct": false },
+        { "text": "<href>", "correct": false }
+      ]
+    },
+    {
+      "question": "CSS nima uchun ishlatiladi?",
+      "options": [
+        { "text": "Veb sahifa tuzilmasini aniqlash", "correct": false },
+        { "text": "Veb sahifani bezatish va uslub berish", "correct": true },
+        { "text": "Ma'lumotlarni saqlash", "correct": false }
+      ]
+    },
+    {
+      "question": "CSS ning to'liq nomi nima?",
+      "options": [
+        { "text": "Creative Style Sheets", "correct": false },
+        { "text": "Cascading Style Sheets", "correct": true },
+        { "text": "Colorful Style Sheets", "correct": false }
+      ]
+    },
+    {
+      "question": "CSSda ID selector qanday belgilanadi?",
+      "options": [
+        { "text": "#idNomi", "correct": true },
+        { "text": ".idNomi", "correct": false },
+        { "text": "@idNomi", "correct": false }
+      ]
+    },
+    {
+      "question": "CSSda class selector qanday belgilanadi?",
+      "options": [
+        { "text": ".classNomi", "correct": true },
+        { "text": "#classNomi", "correct": false },
+        { "text": "@classNomi", "correct": false }
+      ]
+    },
+    {
+      "question": "Bootstrap nima?",
+      "options": [
+        { "text": "Rasm tahrirlovchi dastur", "correct": false },
+        { "text": "Veb dizayn uchun CSS framework", "correct": true },
+        { "text": "Ma'lumotlar bazasi tizimi", "correct": false }
+      ]
+    },
+    {
+      "question": "Bootstrapning asosiy ustun (grid) tizimi necha ustundan iborat?",
+      "options": [
+        { "text": "10", "correct": false },
+        { "text": "12", "correct": true },
+        { "text": "8", "correct": false }
+      ]
+    },
+    {
+      "question": "Bootstrapda tugma (button) klassi qaysi?",
+      "options": [
+        { "text": ".btn", "correct": true },
+        { "text": ".button", "correct": false },
+        { "text": ".click", "correct": false }
+      ]
+    },
+    {
+      "question": "Bootstrapda qaysi class yordamida responsiv container yaratiladi?",
+      "options": [
+        { "text": ".container-fluid", "correct": true },
+        { "text": ".box", "correct": false },
+        { "text": ".grid", "correct": false }
+      ]
+    }
+  ]
+  
