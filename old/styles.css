@@ -80,10 +80,6 @@ body {
     color: #ef4444;
 }
 
-.hidden {
-    display: none !important;
-}
-
 .pulse {
     animation: pulse 1s infinite;
 }

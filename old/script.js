@@ -19,23 +19,8 @@ function escapeHTML(str) {
 // Display error messages
 function showError(message) {
     const errorDiv = document.getElementById('errorMessage');
-    if (errorDiv) {
-        errorDiv.textContent = message;
-        errorDiv.classList.remove('hidden');
-    } else {
-        console.error('errorMessage elementi topilmadi');
-    }
-}
-
-// Hide error messages
-function hideError() {
-    const errorDiv = document.getElementById('errorMessage');
-    if (errorDiv) {
-        errorDiv.classList.add('hidden');
-        errorDiv.textContent = ''; // Clear the text to avoid empty div visibility
-    } else {
-        console.error('errorMessage elementi topilmadi');
-    }
+    errorDiv.textContent = message;
+    errorDiv.classList.remove('hidden');
 }
 
 // Initialize event listeners after DOM is loaded
@@ -59,18 +44,12 @@ document.addEventListener('DOMContentLoaded', () => {
     } else {
         console.error('togglePassword yoki passwordInput elementi topilmadi');
     }
-
-    // Hide error message on page load
-    hideError();
 });
 
 // Login function
 async function login() {
     const username = document.getElementById('usernameInput').value.trim();
     const password = document.getElementById('passwordInput').value.trim();
-
-    // Ensure error message is hidden at the start
-    hideError();
 
     if (!username || !password) {
         showError('Iltimos, login va parolni kiriting.');
@@ -79,10 +58,7 @@ async function login() {
 
     try {
         const response = await fetch('students.json');
-        if (!response.ok) {
-            showError('students.json faylni yuklashda xato');
-            return;
-        }
+        if (!response.ok) throw new Error('students.json faylni yuklashda xato');
         const students = await response.json();
 
         const user = students.find(s => s.username === username && s.password === password);
@@ -90,9 +66,6 @@ async function login() {
             showError('Noto‘g‘ri login yoki parol.');
             return;
         }
-
-        // Successful login, ensure error message is hidden
-        hideError();
 
         currentUser = user;
         localStorage.setItem('userName', user.name);
@@ -106,7 +79,6 @@ async function login() {
         }
     } catch (error) {
         showError(`Kirishda xato: ${error.message}`);
-        return;
     }
 }
 
@@ -114,26 +86,20 @@ async function login() {
 async function loadTests(group) {
     try {
         const response = await fetch('tests.json');
-        if (!response.ok) {
-            showError('tests.json faylni yuklashda xato');
-            return;
-        }
+        if (!response.ok) throw new Error('tests.json faylni yuklashda xato');
         const tests = await response.json();
         questions = tests.find(t => t.group === group)?.questions || [];
         if (questions.length === 0) {
-            showError(`"${group}" guruhiga mos testlar topilmadi`);
-            return;
+            throw new Error(`"${group}" guruhiga mos testlar topilmadi`);
         }
         questions.forEach((q, i) => {
             if (!q.question || !Array.isArray(q.options) || q.options.length < 2 || !q.options.some(opt => opt.correct)) {
-                showError(`Savol ${i + 1} noto‘g‘ri formatda`);
-                return;
+                throw new Error(`Savol ${i + 1} noto‘g‘ri formatda`);
             }
         });
         renderQuestion();
     } catch (error) {
         showError(`Testlarni yuklashda xato: ${error.message}`);
-        return;
     }
 }
 
@@ -317,7 +283,7 @@ function checkAnswers() {
         }
 
         if (questionElement) {
-            const correctAnswerElement = document.getElementById(`question${index + 1}`).querySelector(`input[value="${correctIndex}"]`);
+            const correctAnswerElement = questionElement.querySelector(`input[value="${correctIndex}"]`);
             if (correctAnswerElement) correctAnswerElement.parentElement.classList.add('highlight');
         }
     });
